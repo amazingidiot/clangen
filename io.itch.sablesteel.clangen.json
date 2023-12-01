@@ -1,0 +1,53 @@
+{
+    "app-id": "io.itch.sablesteel.clangen",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "23.08",
+    "sdk": "org.freedesktop.Sdk",
+    "sdk-extensions": [
+    	"org.freedesktop.Sdk.Extension.rust-stable"
+    ],
+    "command": "run.sh",
+    "build-options": {
+        "append-path": "/usr/lib/sdk/llvm16/bin:/usr/lib/sdk/rust-stable/bin",
+        "build-args": [
+            "--share=network"
+        ]
+    },
+    "finish-args": [
+        "--socket=x11",
+        "--device=dri",
+        "--share=ipc",
+        "--socket=pulseaudio",
+        "--filesystem=home",
+        "--env=PYTHONPATH=/app/lib"
+    ],
+    "modules": [
+        {
+            "name": "clangen",
+            "buildsystem": "simple",
+            "build-commands": [
+            	"cp -r /run/build/clangen /app/clangen",
+            	"ln -s",
+            	"install -D run.sh /app/bin/run.sh",
+            	"install -D version.ini /app/clangen/version.ini",
+            	"pip install --target=/app/lib -r /app/clangen/requirements.txt"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/ClanGenOfficial/clangen/archive/refs/tags/v0.10.6.tar.gz",
+                    "archive-type": "tar-gzip",
+                    "sha256": "7eb035391f5bb4fb55b9c44ce760078068fc832b159bda8b92a8bd15d3e050ad"
+                },
+                {
+                    "type": "file",
+                    "path": "version.ini"
+                },
+                {
+                    "type": "file",
+                    "path": "run.sh"
+                }
+            ]
+        }
+    ]
+}
